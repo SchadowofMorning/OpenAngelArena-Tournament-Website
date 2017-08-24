@@ -7,6 +7,7 @@ if you want it to work you need
 - MongoDB
 - rubysass for gulpfile.js
 - NodeJS(ofc)
+- add a SteamAPIKey on line 91 in main.js
 
 ### Things that work:
 - Creating Account with SteamLogin
