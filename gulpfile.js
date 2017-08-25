@@ -13,9 +13,10 @@ gulp.task('sass', () => {
 gulp.task('minifycss', () => {
   gulp.src('src/css/*.css')
   .pipe(cleanCSS())
-  .pipe(gulp.dest('public/css'))
+  .pipe(gulp.dest('app/public/css'))
 })
 gulp.task('cleanup', () =>{
   del(["src/css/*.css"])
+  del(["app/public/css/*.css"])
 })
-gulp.task('compile', ['sass', 'minifycss', 'cleanup'])
+gulp.task('compile', ['cleanup', 'sass', 'minifycss'])
