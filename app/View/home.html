@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+  <script src="/js/home.js"></script>
+</head>
+<header>
+  <ul class="nav">
+    <li class="nav-item"><a href="#">OpenAngelArena Grand-Tournament</a></li>
+    <li class="nav-item"><a href="#SignUp">Sign up</a></li>
+    <li class="nav-item"><a href="#Teams">Teams</a></li>
+    <li class="nav-item"><a href="#Tournament">The Tournament</a></li>
+  </ul>
+</header>
+<body>
+  <div ng-app="App" ng-controller="AppCtrl">
+  <div class="page">
+
+    <div class="sidepanel" id="SignUp" ng-hide="hideLogin">
+      <h3>Login with Steam:</h3>
+      <a href="/login/steam"><img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_02.png"></img></a>
+    </div>
+    <div class="sidepanel" id="UserInfo" ng-hide="!hideLogin">
+      <h3>Welcome to OAA</h3>
+      <h4>SteamID: {{profile.SteamID}}</h4>
+    </div>
+    <div class="section" id="Tournament">
+
+      <h1 style="font-family: Helvetica">Current Teams</h1>
+
+      <table class="table">
+
+        <thead>
+          <th>Team Name</th>
+          <th>Team Players</th>
+          <th>Open to Join</th>
+        </thead>
+
+        <tbody>
+          <tr class="table-tr" ng-repeat="i in Teams">
+            <td>{{i.Name}}</td>
+            <td>{{i.Players.length}} / 5</td>
+            <td> no </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+    <div class="section" id="TeamJoinOrCreate" ng-hide="hasTeam">
+      <h3>
+        Join a Team per invitelink or create your own Team!
+      </h3>
+      <label class="label">Create a Team:</label><input class="input-text" type="text" ng-model="ctname" placeholder="Teamname..."></input>
+      <button ng-click="createTeam()" class="input-button">Create Team</button>
+    </div>
+    <div class="section" id="TeamController" ng-show="hasTeam">
+        <input class="input-text" id="invlink" type="text" readonly ng-model="invlink"></input><button id="invlinkbtn" data-clipboard-target="#invlink" class="input-button"> Copy to clipboard!</button>
+      <br>
+      <table class="table">
+        <thead>
+          <th>SteamID</th>
+          <th ng-show="leader">Kick</th>
+        </thead>
+        <tbody>
+          <tr class="table-tr" ng-repeat="p in team.Players">
+            <td>{{ p }}</td>
+            <td ng-show="leader"><button ng-click="kick(p)" class="input-button"> Kick </button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
