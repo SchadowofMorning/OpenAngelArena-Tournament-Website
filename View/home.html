@@ -64,12 +64,12 @@
       <table class="table">
         <thead>
           <th>SteamID</th>
-          <th ng-hide="leader">Kick</th>
+          <th ng-show="leader">Kick</th>
         </thead>
         <tbody>
           <tr class="table-tr" ng-repeat="p in team.Players">
             <td>{{ p }}</td>
-            <td ng-hide="leader"><button ng-click="kick(p)" class="input-button"> Kick </button></td>
+            <td ng-show="leader"><button ng-click="kick(p)" class="input-button"> Kick </button></td>
           </tr>
         </tbody>
       </table>

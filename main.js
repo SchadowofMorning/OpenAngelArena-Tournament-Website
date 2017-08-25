@@ -4,17 +4,19 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const SteamStrategy = require('passport-steam')
 const passport = require('passport')
-const MongoStore = require('express-session-mongo')
+const mongoose = require('mongoose')
+const MongoStore = require('connect-mongo')(session)
 //Import Project Files
-const query = require('./model.js')
+const query = require('./Model/model.js')
 //Express middleware
 app.use(express.static('public'))
 app.use( bodyParser.json() )
 app.use(bodyParser.urlencoded({
   extended: true
 }))
+var connection = mongoose.createConnection(process.env.ATLASURL)
 app.use(session({
-  store: new MongoStore,
+  store: new MongoStore({ mongooseConnection: connection}),
   secret: '30 Pieces of Silver',
   resave: true,
   saveUninitialized: true
@@ -88,7 +90,7 @@ app.get('/login/steam/return',
 passport.use(new SteamStrategy({
   "returnURL": "http://localhost/login/steam/return",
   "realm": "http://localhost/",
-  "apiKey": "add api key",
+  "apiKey": process.env.API_KEY,
   "profile": true
     },
   function(identifier, profile, done) {

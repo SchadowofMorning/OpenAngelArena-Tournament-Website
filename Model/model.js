@@ -1,13 +1,13 @@
+var model = module.exports;
 const mongoose = require('mongoose')
-const config = require('../config.json')
 const options = {
   server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
   replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } }
 }
-mongoose.connect(config.database.url, options)
 const Schema = mongoose.Schema
-var model = module.exports;
+
 const Token = require('rand-token')
+model.connection = mongoose.connect(process.env.ATLASURL, options)
 //TeamSchema
 var TeamSchema = new Schema({
   Name: {
