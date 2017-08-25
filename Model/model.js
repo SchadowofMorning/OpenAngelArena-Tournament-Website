@@ -84,8 +84,12 @@ model.addPlayer = function(name, id){
     if(res.Players.includes(id)){
       console.log("player already in the team")
     } else {
-      Team.findOneAndUpdate({Name: name},  {$push: {Players: id}}).exec(function(err, doc){
-      })
+      if(res.Players.length >= 5){
+        console.log("Team already full")
+      } else {
+        Team.findOneAndUpdate({Name: name},  {$push: {Players: id}}).exec(function(err, doc){
+        })
+      }
     }
   })
 }
