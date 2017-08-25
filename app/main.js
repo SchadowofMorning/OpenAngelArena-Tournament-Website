@@ -77,6 +77,7 @@ app.get('/invite/:team/:token', function(req, res){
       }
     })
   }
+  res.redirect('/')
 })
 //Passport Routes
 app.get('/login/steam', passport.authenticate('steam'),function(req, res){})
@@ -116,6 +117,7 @@ passport.deserializeUser(function(id, done){
   done(null, id)
 })
 
-app.listen(80, function(){
+app.listen(process.env.PORT, function(){
+  console.log(process.env.PORT)
   console.log('OAA-GT is running')
 })

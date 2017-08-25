@@ -19,4 +19,8 @@ gulp.task('cleanup', () =>{
   del(["src/css/*.css"])
   del(["app/public/css/*.css"])
 })
+gulp.task('deploy', ()=>{
+  gulp.src('app')
+  .pipe(gulp.dest('../../Server/Deploy/Heroku/OpenAngelArena-Tournament-Website'))
+})
 gulp.task('compile', ['cleanup', 'sass', 'minifycss'])

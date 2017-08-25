@@ -52,6 +52,7 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
     })
     $scope.updateTeam($scope.ctname)
     $scope.updateTeams()
+    $scope.getTeam()
     $scope.hasTeam = true;
   }
 
