@@ -116,6 +116,6 @@ passport.deserializeUser(function(id, done){
   done(null, id)
 })
 
-app.listen(80, function(){
+app.listen(process.env.PORT, function(){
   console.log('OAA-GT is running')
 })
