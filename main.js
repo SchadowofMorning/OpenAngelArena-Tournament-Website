@@ -81,15 +81,15 @@ app.get('/invite/:team/:token', function(req, res){
 //Passport Routes
 app.get('/login/steam', passport.authenticate('steam'),function(req, res){})
 app.get('/login/steam/return',
-  passport.authenticate('steam', { failureRedirect: '/' }),
+  passport.authenticate('steam', { failureRedirect: process.env.HOSTURL + '/' }),
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect('/');
 });
 //SteamStrategy
 passport.use(new SteamStrategy({
-  "returnURL": "http://localhost/login/steam/return",
-  "realm": "http://localhost/",
+  "returnURL": process.env.HOSTURL + "/login/steam/return",
+  "realm": process.env.HOSTURL,
   "apiKey": process.env.API_KEY,
   "profile": true
     },
