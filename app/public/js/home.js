@@ -11,20 +11,23 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
   }
 
   $scope.updateTeams()
-
   $http.post('/user/this').then(function(res){
     console.log(res.data)
     if(res.data == false){
       $scope.hideLogin = false;
+      $scope.hasTeam = false;
     } else {
       $scope.hideLogin = true;
       $scope.profile = res.data
-      if(res.data.Team){
+      if(res.data.Team != ""){
         $scope.hasTeam = true;
         $scope.getTeam(res.data.Team)
         if(res.data.Team.Leader == $scope.profile.SteamID){
           $scope.leader = true;
         }
+      } else {
+        $scope.hasTeam = false;
+        $scope.LoggedInNoTeam = true;
       }
     }
   })
@@ -41,6 +44,9 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
   }
 
   $scope.createTeam = function(){
+    if($scope.ctname.match(/\s|\./g)){
+      alert("Teamname cannot include whitespaces!")
+    } else {
     $http({
       method: 'POST',
       url: '/model/create/team',
@@ -54,6 +60,8 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
     $scope.updateTeams()
     $scope.getTeam()
     $scope.hasTeam = true;
+    $scope.LoggedInNoTeam = false;
+  }
   }
 
   $scope.updateTeam = function(name){

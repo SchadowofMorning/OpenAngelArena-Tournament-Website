@@ -14,7 +14,7 @@ app.use( bodyParser.json() )
 app.use(bodyParser.urlencoded({
   extended: true
 }))
-var connection = mongoose.createConnection(process.env.ATLASURL)
+var connection = mongoose.createConnection(process.env.MONGOURL)
 app.use(session({
   store: new MongoStore({ mongooseConnection: connection}),
   secret: '30 Pieces of Silver',
@@ -77,7 +77,6 @@ app.get('/invite/:team/:token', function(req, res){
       }
     })
   }
-  res.redirect('/')
 })
 //Passport Routes
 app.get('/login/steam', passport.authenticate('steam'),function(req, res){})
