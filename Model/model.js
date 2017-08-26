@@ -7,7 +7,7 @@ const options = {
 const Schema = mongoose.Schema
 
 const Token = require('rand-token')
-model.connection = mongoose.connect(process.env.ATLASURL, options)
+model.connection = mongoose.connect(process.env.MONGOURL, options)
 //TeamSchema
 var TeamSchema = new Schema({
   Name: {
