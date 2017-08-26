@@ -79,6 +79,7 @@ model.updateTeam = function(id, name){
     console.log(res)
   })
 }
+
 model.addPlayer = function(name, id){
   model.get('Team', name, function(res){
     if(res.Players.includes(id)){
@@ -92,4 +93,14 @@ model.addPlayer = function(name, id){
       }
     }
   })
+}
+model.removePlayer = function(team, id){
+  Team.findOneAndUpdate({Name: team}, {$pull: {Players: id}}).exec(function(err, doc){
+    console.log(doc)
+    if(doc.Players.length == 0){
+      Team.remove({_id: doc._id}).exec()
+    }
+  })
+  User.findOneAndUpdate({SteamID: id}, {$set: {Team: ""}}).exec()
+
 }

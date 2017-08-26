@@ -66,6 +66,11 @@ app.post('/model/update/user/team', function(req, res){
     res.send(false)
   }
 })
+app.post('/model/remove/team/player', function(req, res){
+  if(req.user){
+    query.removePlayer(req.body.Team, req.body.Name)
+  }
+})
 app.get('/invite/:team/:token', function(req, res){
   if(req.user){
     query.get("Team", req.params.team, function(team){

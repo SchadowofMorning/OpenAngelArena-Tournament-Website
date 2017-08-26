@@ -1,3 +1,4 @@
+(adsbygoogle = window.adsbygoogle || []).push({})
 var app = angular.module("App", ['ngCookies'])
 
 app.controller('AppCtrl', function($scope, $http, $cookies){
@@ -12,7 +13,6 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
 
   $scope.updateTeams()
   $http.post('/user/this').then(function(res){
-    console.log(res.data)
     if(res.data == false){
       $scope.hideLogin = false;
       $scope.hasTeam = false;
@@ -21,10 +21,11 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
       $scope.profile = res.data
       if(res.data.Team != ""){
         $scope.hasTeam = true;
-        $scope.getTeam(res.data.Team)
-        if(res.data.Team.Leader == $scope.profile.SteamID){
-          $scope.leader = true;
-        }
+        $scope.getTeam(res.data.Team).then(function(data){
+            if(data.Leader == $scope.profile.SteamID){
+              $scope.leader = true;
+            }
+        })
       } else {
         $scope.hasTeam = false;
         $scope.LoggedInNoTeam = true;
@@ -32,15 +33,15 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
     }
   })
 
-  $scope.getTeam = function(name){
-    $http({
+  $scope.getTeam = async function(name, cb){
+    let response = await $http({
       method: 'POST',
       url: '/model/get/team',
       data: { Name: name },
-    }).then(function(response){
+    })
       $scope.team = response.data;
       $scope.invlink = "http://localhost/invite/" + $scope.team.Name + "/" + $scope.team.INV_TOKEN;
-    })
+      return response.data;
   }
 
   $scope.createTeam = function(){
@@ -58,12 +59,19 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
     })
     $scope.updateTeam($scope.ctname)
     $scope.updateTeams()
-    $scope.getTeam()
+    $scope.getTeam($scope.profile.Team)
     $scope.hasTeam = true;
     $scope.LoggedInNoTeam = false;
   }
   }
-
+$scope.kick = function(id){
+  $http({
+    method: 'POST',
+    url: '/model/remove/team/player',
+    data: { Team: $scope.profile.Team, Name: id}
+  })
+  $scope.getTeam($scope.profile.Team);
+}
   $scope.updateTeam = function(name){
     $http({
       method: 'POST',

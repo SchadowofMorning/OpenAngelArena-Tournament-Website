@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.min.js"></script>
@@ -14,12 +15,18 @@
 <header>
   <div class="navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="/#">OAA Tournament</a>
-    <button class="navbar-toggler" data-toggle="collapse" data-target="#SteamWrapper"><span class="navbar-toggler-icon octicon-clippy"></span></button>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#SteamWrapper"><span class="navbar-toggler-icon"></span></button>
   </div>
 </header>
 <body>
   <div ng-app="App" ng-controller="AppCtrl">
-  <div id="SteamWrapper" class="collapse float-right" style="margin: 20px;">
+    <div id="AdWrapper" class="float-left">
+  <ins class="adsbygoogle"
+       style="display:inline-block;width:300px;height:250px"
+       data-ad-client="ca-pub-3550298346659940"
+       data-ad-slot="1682345786"></ins>
+  </div>
+  <div id="SteamWrapper" class="collapse float-right" style="margin:5px;">
     <div class="card" style="width:20rem;" ng-hide="hideLogin">
       <div class="card-body">
       <h4 class="card-title">Login with Steam:</h4>
@@ -89,7 +96,7 @@
         <tbody>
           <tr class="table-tr" ng-repeat="p in team.Players">
             <td>{{ p }}</td>
-            <td ng-show="leader"><button ng-click="kick(p)" class="input-button"> Kick </button></td>
+            <td ng-show="leader"><button ng-click="kick(p)" class="btn btn-danger"> Kick </button></td>
           </tr>
         </tbody>
       </table>
