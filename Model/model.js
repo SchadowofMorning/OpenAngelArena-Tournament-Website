@@ -34,7 +34,8 @@ var UserSchema = new Schema({
     unique: true
   },
   Team: {
-    type: String
+    type: String,
+    default: ""
   }
 })
 

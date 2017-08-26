@@ -56,12 +56,14 @@ app.post('/model/create/team', function(req, res){
       res.send(false)
     } else {
       query.save("Team", req.body)
+      res.send(true)
     }
   })
 })
 app.post('/model/update/user/team', function(req, res){
   if(req.user){
     query.updateTeam(req.user, req.body.Team)
+    res.send(true)
   } else {
     res.send(false)
   }
