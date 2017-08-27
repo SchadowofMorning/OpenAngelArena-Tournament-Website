@@ -1,47 +1,19 @@
 var model = module.exports;
 const mongoose = require('mongoose')
+const TeamModel = require('./Team.js')
+const UserModel = require('./User.js')
 const options = {
   server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
   replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } }
 }
 const Schema = mongoose.Schema
 
-const Token = require('rand-token')
+var Team = TeamModel.model;
+var User = UserModel.model;
+
+
 model.connection = mongoose.connect(process.env.MONGOURL, options)
-//TeamSchema
-var TeamSchema = new Schema({
-  Name: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  Players: {
-    type: [String]
-  },
-  Leader: {
-    type: String,
-    required: true
-  },
-  INV_TOKEN :{
-    type: String
-  }
-})
-//UserSchema
-var UserSchema = new Schema({
-  SteamID: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  Team: {
-    type: String,
-    default: ""
-  }
-})
-
-var Team = mongoose.model('Team', TeamSchema)
-var User = mongoose.model('User', UserSchema)
-
+model.msconnector = mongoose.createConnection(process.env.MONGOURL, options)
 model.get = function(type, ident, done){
   let query
   var result
@@ -76,7 +48,7 @@ model.save = function(type, data){
   })
 }
 model.updateTeam = function(id, name){
-  User.findOneAndUpdate({SteamID: id},  {Team: name}).exec(function(err, res){
+  User.findOneAndUpdate({SteamID: id},  {$set: { Team: name } }).exec(function(err, res){
     console.log(res)
   })
 }

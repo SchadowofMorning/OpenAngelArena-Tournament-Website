@@ -7,20 +7,26 @@ const passport = require('passport')
 const mongoose = require('mongoose')
 const MongoStore = require('connect-mongo')(session)
 //Import Project Files
-const query = require('./Model/model.js')
+const ctrl = require('./Controller/index.js')
 //Express middleware
 app.use(express.static('public'))
 app.use( bodyParser.json() )
 app.use(bodyParser.urlencoded({
   extended: true
 }))
-var connection = mongoose.createConnection(process.env.MONGOURL)
+//MongoStore
+var mongostore = new MongoStore({
+  mongooseConnection: ctrl.msconnector,
+  url: process.env.MONGOURL
+})
+//Session
 app.use(session({
-  store: new MongoStore({ mongooseConnection: connection}),
+  store: mongostore,
   secret: '30 Pieces of Silver',
   resave: true,
   saveUninitialized: true
 }))
+//Passport init
 app.use(passport.initialize())
 app.use(passport.session())
 //Routes
@@ -29,7 +35,7 @@ app.get('/', function(req, res){
 })
 app.post('/user/this', function(req, res){
   if(req.user){
-    query.get("User", req.user, function(user){
+    ctrl.User.get(req.user, function(user){
       res.send(user)
     })
   } else {
@@ -37,32 +43,37 @@ app.post('/user/this', function(req, res){
   }
 })
 app.post('/user', function(req, res){
-  let profile = query.get("User", req.body.steamid)
+  let profile = ctrl.User.get(req.body.steamid)
   res.send(profile)
 })
 app.get('/model/get/teams', function(req, res){
-  query.get('Teams', null, function(teams){
+  ctrl.Team.getAll(function(teams){
     res.send(teams)
   })
 })
 app.post('/model/get/team', function(req, res){
-  query.get('Team', req.body.Name, function(team){
+  ctrl.Team.get(req.body.Name, function(team){
     res.send(team)
   })
 })
 app.post('/model/create/team', function(req, res){
-  query.get("User", req.user, function(user){
+  ctrl.User.get(req.user, function(user){
     if(user.Team){
       res.send(false)
     } else {
-      query.save("Team", req.body)
+      var writedata = {
+        "Name": req.body.Name,
+        "Leader": req.body.Leader,
+        "Players": [req.body.Leader]
+      };
+      ctrl.Team.save(writedata)
       res.send(true)
     }
   })
 })
 app.post('/model/update/user/team', function(req, res){
   if(req.user){
-    query.updateTeam(req.user, req.body.Team)
+    ctrl.User.update(req.user, "Team" , req.body.Team)
     res.send(true)
   } else {
     res.send(false)
@@ -70,14 +81,14 @@ app.post('/model/update/user/team', function(req, res){
 })
 app.post('/model/remove/team/player', function(req, res){
   if(req.user){
-    query.removePlayer(req.body.Team, req.body.Name)
+    ctrl.removePlayer(req.body.Team, req.body.Name)
   }
 })
 app.get('/invite/:team/:token', function(req, res){
   if(req.user){
-    query.get("Team", req.params.team, function(team){
+    ctrl.Team.get(req.params.team, function(team){
       if(req.params.token == team.INV_TOKEN){
-        query.addPlayer(team.Name, req.user)
+        ctrl.Team.addPlayer(team.Name, req.user)
         res.redirect('/')
       } else {
         res.send("sorry wrong token")
@@ -94,30 +105,30 @@ app.get('/login/steam/return',
     res.redirect('/');
 });
 //SteamStrategy
-passport.use(new SteamStrategy({
+var strategy = new SteamStrategy({
   "returnURL": process.env.HOSTURL + "/login/steam/return",
   "realm": process.env.HOSTURL,
   "apiKey": process.env.API_KEY,
   "profile": true
     },
   function(identifier, profile, done) {
-    query.get("User", profile._json.steamid, function(user){
+    ctrl.User.get(profile._json.steamid, function(user){
       if(user == null){
-        query.save("User", {SteamID: profile._json.steamid})
+        ctrl.User.save({"SteamID": profile._json.steamid})
         return done(null, profile._json.steamid)
       } else {
         return done(null, user)
       }
-
     })
-}))
+})
+passport.use(strategy)
 //Passport Serialization
 passport.serializeUser(function(user, done){
   if(user.SteamID) {
-    done(null, user.SteamID)
-  } else {
-    done(null, user)
-  }
+      done(null, user.SteamID)
+    } else {
+      done(null, user)
+    }
 })
 passport.deserializeUser(function(id, done){
   done(null, id)
