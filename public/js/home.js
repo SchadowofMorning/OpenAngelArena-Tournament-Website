@@ -8,6 +8,7 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
   $scope.updateTeams = function(){
     $http.get('/model/get/teams').then(function(data){
       $scope.Teams = data.data;
+      console.log(data)
     })
   }
 
@@ -51,7 +52,7 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
     $http({
       method: 'POST',
       url: '/model/create/team',
-      data: { Name: $scope.ctname , Leader: $scope.profile.SteamID, Players: $scope.profile.SteamID}
+      data: { Name: $scope.ctname , Leader: $scope.profile.SteamID}
     }).then(function(response){
       if(response.data == false){
         console.log("Already in a Team!")
@@ -62,6 +63,7 @@ app.controller('AppCtrl', function($scope, $http, $cookies){
     $scope.getTeam($scope.profile.Team)
     $scope.hasTeam = true;
     $scope.LoggedInNoTeam = false;
+    location.reload()
   }
   }
 $scope.kick = function(id){
@@ -71,6 +73,7 @@ $scope.kick = function(id){
     data: { Team: $scope.profile.Team, Name: id}
   })
   $scope.getTeam($scope.profile.Team);
+  location.reload()
 }
   $scope.updateTeam = function(name){
     $http({
