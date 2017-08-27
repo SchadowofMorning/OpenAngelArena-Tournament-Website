@@ -1,7 +1,7 @@
 (adsbygoogle = window.adsbygoogle || []).push({})
 var app = angular.module("App", ['ngCookies'])
 
-app.controller('AppCtrl', function($scope, $http, $cookies){
+app.controller('AppCtrl', ['$scope', '$http', '$cookies', function($scope, $http, $cookies){
   (function(){
     new Clipboard('#invlinkbtn');
   })();
@@ -82,4 +82,4 @@ $scope.kick = function(id){
       data: { Team: name}
     })
   }
-})
+}])
